@@ -13,16 +13,11 @@ cd artbox
 
 # 2) prepare system python env & service
 make install
-
-# 3) configure
-sudo nano /etc/artbox/uploader.env
-# set at least:
-# UPLOAD_DIR=/srv/art/incoming
-# HOST=0.0.0.0
-# PORT=8765
-# (optional) UPLOAD_TOKEN=your-secret
-sudo systemctl restart art-upload
 ```
+
+Note:
+- The install target creates a virtualenv at `/opt/artbox/venv` and installs a systemd service. These steps require sudo and will run privileged commands (including the venv creation itself).
+- If you previously created `/opt/artbox/venv` with sudo and saw a "Permission denied" during `python3 -m venv`, just rerun `make install` after this fix — the venv creation now runs with sudo as well.
 
 Open `http://SERVER_IP:PORT` on your phone (same Wi-Fi).
 Use the Upload page for files + quick notes; view Gallery for recent files.
@@ -40,6 +35,11 @@ make update
 Local dev (without touching the service):
 
 ```bash
+# optional: local venv for development
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r uploader/requirements.txt
+
 # in your cloned repo (e.g. ~/code/artbox)
 make dev
 # serves from your working copy; writes to /tmp/uploads

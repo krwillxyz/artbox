@@ -20,7 +20,7 @@ install: venv deps configure
 
 venv:
 	sudo mkdir -p $(VENV)
-	sudo test -x $(VENV)/bin/python || python3 -m venv $(VENV)
+	sudo test -x $(VENV)/bin/python || sudo python3 -m venv $(VENV)
 
 deps:
 	sudo $(VENV)/bin/pip install -r uploader/requirements.txt
