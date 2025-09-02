@@ -1,0 +1,23 @@
+# python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+
+# env & secrets
+**/.env
+.env
+
+# runtime data (lives outside repo)
+incoming/
+work/
+export/
+logs/
+catalog.db
+
+# os junk
+.DS_Store
+Thumbs.db
+

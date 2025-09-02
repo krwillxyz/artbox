@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Recent uploads</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;margin:0;background:#0b0c0f;color:#e9eef2}
+  .wrap{max-width:980px;margin:0 auto;padding:24px}
+  a{color:#9cc1ff;text-decoration:none}
+  .grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+  .card{background:#12141a;border:1px solid #1f2330;border-radius:12px;padding:8px}
+  img,video{width:100%;height:160px;object-fit:cover;border-radius:8px;border:1px solid #1f2330}
+  .muted{opacity:.75}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p><a href="/">← Upload</a></p>
+  <h2>Recent uploads</h2>
+  <p class="muted">Showing the latest files in the staging folder.</p>
+  <div class="grid">
+    {% for f in files %}
+      <div class="card">
+        {% if f.name.lower().endswith((".jpg",".jpeg",".png",".webp",".gif")) %}
+          <img src="/incoming/{{ f.name }}" alt="{{ f.name }}">
+        {% elif f.name.lower().endswith((".mp4",".mov",".m4v",".webm",".avi")) %}
+          <video src="/incoming/{{ f.name }}" controls muted></video>
+        {% else %}
+          <div class="muted">{{ f.name }}</div>
+        {% endif %}
+        <div class="muted" style="margin-top:6px">{{ f.name }}</div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+</body>
+</html>
+

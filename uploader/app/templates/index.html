@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Upload</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;margin:0;background:#0b0c0f;color:#e9eef2}
+  .wrap{max-width:620px;margin:0 auto;padding:24px}
+  h1{margin:.2rem 0 1rem;font-size:1.4rem}
+  .card{background:#12141a;border:1px solid #1f2330;border-radius:14px;padding:16px}
+  input,textarea,button{width:100%;font:inherit;border-radius:12px;border:1px solid #1f2330;background:#0f1117;color:#e9eef2;padding:10px}
+  textarea{min-height:90px;resize:vertical}
+  button{cursor:pointer}
+  .muted{opacity:.75}
+  .ok{background:#0f2a14;border:1px solid #1f5a2a;color:#b7ffc7;padding:10px;border-radius:10px;margin-bottom:10px;display:none}
+  .hint{font-size:.9rem;opacity:.7;margin-top:8px}
+  .row{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+  @media (max-width:560px){ .row{grid-template-columns:1fr} }
+  .links{margin-top:10px}
+  a{color:#9cc1ff;text-decoration:none}
+  code{background:#0f1117;padding:2px 5px;border-radius:6px;border:1px solid #1f2330}
+  .foot{margin-top:16px}
+  .hint small{opacity:.9}
+  .hint small code{opacity:.9}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Quick Upload</h1>
+  <p class="muted">Files save to <code>{{ upload_dir }}</code>. Mobile-friendly.</p>
+
+  <div id="ok" class="ok"></div>
+
+  <div class="card">
+    <form method="post" action="/upload" enctype="multipart/form-data">
+      <label class="muted">Files</label>
+      {% if multi %}
+        <input type="file" name="files" multiple accept="image/*,video/*" required>
+      {% else %}
+        <input type="file" name="file" accept="image/*,video/*" required>
+      {% endif %}
+
+      <div class="hint">Optional quick metadata (saved as a small JSON next to the uploads)</div>
+      <input name="seed_title" placeholder="Working title (optional)">
+      <textarea name="seed_notes" placeholder="Notes (what’s on your mind, materials, etc.)"></textarea>
+      <input name="seed_tags" placeholder="Tags (comma separated)">
+
+      {% if requires_token %}
+        <div class="hint">Token required</div>
+        <input type="password" name="token" placeholder="Upload token" required>
+      {% endif %}
+
+      <div style="height:10px"></div>
+      <button>Upload</button>
+    </form>
+  </div>
+
+  <div class="links foot">
+    <a href="/gallery">View recent uploads</a>
+    <span class="muted"> · Data root: {{ data_root }}</span>
+  </div>
+
+  <p class="hint">Tip: add to home screen for one-tap access.</p>
+</div>
+
+<script>
+  const params = new URLSearchParams(location.search);
+  if (params.get('ok')==='1') {
+    const el = document.getElementById('ok');
+    el.textContent = "Uploaded: " + (params.get('name') || "");
+    el.style.display = 'block';
+    history.replaceState(null, "", location.pathname);
+  }
+  // iOS fix: allow multiple selection reliably
+  document.querySelectorAll('input[type=file]').forEach(inp => {
+    if (inp.hasAttribute('multiple')) { inp.setAttribute('capture', 'environment'); }
+  });
+}</script>
+</body>
+</html>
+

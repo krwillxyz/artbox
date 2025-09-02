@@ -1,0 +1,20 @@
+[Unit]
+Description=Art Uploader (FastAPI)
+After=network.target
+
+[Service]
+# EDIT THESE
+User=kristopher
+WorkingDirectory=/opt/artbox/uploader
+# central config (outside repo)
+EnvironmentFile=/etc/artbox/uploader.env
+# venv for this app
+Environment="PATH=/opt/artbox/venv/bin"
+# run uvicorn directly; app reads .env via systemd env too
+ExecStart=/opt/artbox/venv/bin/uvicorn app.main:app --host ${HOST} --port ${PORT} --workers 2
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
+
